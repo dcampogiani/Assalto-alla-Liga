@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name" translatable="false">Assalto alla Liga</string>
+    <string name="choose_home_team">Choose home team</string>
+    <string name="choose_away_team">Choose away team</string>
+
+    <string name="will_team_win">Will %1$s win?</string>
+    <string name="will_team_win_vs">Will %1$s win against %2$s?</string>
+    <string name="vs" translatable="false">%1$s vs %2$s</string>
+    <string name="choose_sharing_app">Share post to</string>
+
+</resources>

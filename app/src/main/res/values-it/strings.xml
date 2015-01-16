@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="choose_home_team">Scegli squadra in casa</string>
+    <string name="choose_away_team">Scegli squadra in trasferta</string>
+    <string name="will_team_win">%1$s vincerà?</string>
+    <string name="choose_sharing_app">Condividi con</string>
+    <string name="will_team_win_vs">%1$s vincerà contro %2$s?</string>
+
+</resources>
