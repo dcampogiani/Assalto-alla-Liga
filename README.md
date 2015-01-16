@@ -1,4 +1,4 @@
-# Assalto-alla-Liga
+# Assalto alla Liga
 An awesome useless application I've wrote to learn some Android Patterns and API such as:
  - Material Design using support library
  - Floating Action Button
@@ -8,6 +8,8 @@ An awesome useless application I've wrote to learn some Android Patterns and API
  - State save/restore
  - Something else I've forgot
  
+##[Download APK](https://github.com/dcampogiani/Assalto-alla-Liga/raw/master/app/app-release.apk)
+
 ## Phone UI
 ![Phone UI](/screenshots/smartphone.gif "Phone UI")
 
