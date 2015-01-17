@@ -7,10 +7,12 @@ import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
+import com.crashlytics.android.Crashlytics;
 import com.danielecampogiani.assaltoallaliga.R;
 import com.danielecampogiani.assaltoallaliga.fragments.InfoFragment;
 import com.danielecampogiani.assaltoallaliga.fragments.SelectFirstTeamFragment;
 import com.danielecampogiani.assaltoallaliga.fragments.SelectSecondTeamFragment;
+import io.fabric.sdk.android.Fabric;
 
 
 public class MainActivity extends ActionBarActivity implements SelectFirstTeamFragment.HomeTeamSelectedListener, SelectSecondTeamFragment.AwayTeamSelectedListener {
@@ -29,6 +31,7 @@ public class MainActivity extends ActionBarActivity implements SelectFirstTeamFr
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Fabric.with(this, new Crashlytics());
         setContentView(R.layout.activity_main);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
