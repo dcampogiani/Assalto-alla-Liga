@@ -7,3 +7,5 @@
 .idea/
 
 app/crashlytics.properties
+
+app/src/main/assets/crashlytics-build.properties

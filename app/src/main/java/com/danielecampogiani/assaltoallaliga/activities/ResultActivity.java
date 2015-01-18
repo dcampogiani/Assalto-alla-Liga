@@ -12,6 +12,7 @@ import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.danielecampogiani.assaltoallaliga.R;
 import com.getbase.floatingactionbutton.FloatingActionButton;
@@ -38,6 +39,7 @@ public class ResultActivity extends ActionBarActivity {
     private FloatingActionButton fab;
     private Toolbar mToolbar;
     private View mToolbarBackground;
+    private TextView mErrorTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +51,7 @@ public class ResultActivity extends ActionBarActivity {
         mToolbar.setTitleTextColor(getResources().getColor(R.color.icons));
         mToolbar.setSubtitleTextColor(getResources().getColor(R.color.primary_light));
         mToolbarBackground = findViewById(R.id.toolbar_background);
+        mErrorTextView = (TextView) findViewById(R.id.errorTextView);
 
         mImageAnimation = new AlphaAnimation(0, 1);
         mImageAnimation.setInterpolator(new AccelerateInterpolator());
@@ -131,23 +134,36 @@ public class ResultActivity extends ActionBarActivity {
         Ion.with(this).load("http://yesno.wtf/api").asJsonObject().setCallback(new FutureCallback<JsonObject>() {
             @Override
             public void onCompleted(Exception e, JsonObject result) {
-                mCurrentImageUrl = result.get("image").getAsString();
+                if (e != null) {
+                    showError(getString(R.string.network_error), true);
+                    if (firstRun)
+                        showLoading(false);
+                    else
+                        swipeRefreshLayout.setRefreshing(false);
+                } else {
+                    showError("", false);
+                    mCurrentImageUrl = result.get("image").getAsString();
 
-                Ion.with(imageView).animateIn(mImageAnimation).centerCrop().load(mCurrentImageUrl).setCallback(new FutureCallback<ImageView>() {
-                    @Override
-                    public void onCompleted(Exception e, ImageView result) {
-                        if (firstRun)
-                            showLoading(false);
-                        else
-                            swipeRefreshLayout.setRefreshing(false);
-                        showFAB(true);
+                    Ion.with(imageView).animateIn(mImageAnimation).centerCrop().load(mCurrentImageUrl).setCallback(new FutureCallback<ImageView>() {
+                        @Override
+                        public void onCompleted(Exception e, ImageView result) {
+                            if (e != null)
+                                showError(getString(R.string.network_error), true);
+                            else {
+                                showError("", false);
+                                if (firstRun)
+                                    showLoading(false);
+                                else
+                                    swipeRefreshLayout.setRefreshing(false);
+                                showFAB(true);
 
-
-                        //mToolbar.setBackgroundColor(getResources().getColor(android.R.color.transparent));
-                        mToolbarBackground.animate().translationY(-mToolbarBackground.getBottom()).setInterpolator(new AccelerateInterpolator()).start();
-                        mToolbar.setSubtitleTextColor(getResources().getColor(R.color.accent));
-                    }
-                });
+                                //mToolbar.setBackgroundColor(getResources().getColor(android.R.color.transparent));
+                                mToolbarBackground.animate().translationY(-mToolbarBackground.getBottom()).setInterpolator(new AccelerateInterpolator()).start();
+                                mToolbar.setSubtitleTextColor(getResources().getColor(R.color.accent));
+                            }
+                        }
+                    });
+                }
             }
         });
 
@@ -186,6 +202,42 @@ public class ResultActivity extends ActionBarActivity {
                 fab.startAnimation(animation);
             }
         }
+    }
+
+    private void showError(String text, boolean show) {
+
+        if (show) {
+            Animation animation = new AlphaAnimation(0, 1);
+            animation.setInterpolator(new AccelerateInterpolator());
+            mErrorTextView.setText(text);
+            mErrorTextView.setVisibility(View.VISIBLE);
+            mErrorTextView.startAnimation(animation);
+
+        } else if (mErrorTextView.getVisibility() == View.VISIBLE) {
+            Animation animation = new AlphaAnimation(1, 0);
+            animation.setInterpolator(new AccelerateInterpolator());
+            animation.setAnimationListener(new Animation.AnimationListener() {
+                @Override
+                public void onAnimationStart(Animation animation) {
+
+                }
+
+                @Override
+                public void onAnimationEnd(Animation animation) {
+                    mErrorTextView.setText("");
+                    mErrorTextView.setVisibility(View.INVISIBLE);
+                }
+
+                @Override
+                public void onAnimationRepeat(Animation animation) {
+
+                }
+            });
+
+            mErrorTextView.startAnimation(animation);
+        }
+
+
     }
 
     private void showLoading(boolean value) {

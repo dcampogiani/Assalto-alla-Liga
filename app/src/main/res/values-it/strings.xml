@@ -6,5 +6,6 @@
     <string name="will_team_win">%1$s vincerà?</string>
     <string name="choose_sharing_app">Condividi con</string>
     <string name="will_team_win_vs">%1$s vincerà contro %2$s?</string>
+    <string name="network_error">Controlla la tua connessione ad internet</string>
 
 </resources>

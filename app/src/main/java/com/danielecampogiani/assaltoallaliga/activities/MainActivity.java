@@ -12,6 +12,7 @@ import com.danielecampogiani.assaltoallaliga.R;
 import com.danielecampogiani.assaltoallaliga.fragments.InfoFragment;
 import com.danielecampogiani.assaltoallaliga.fragments.SelectFirstTeamFragment;
 import com.danielecampogiani.assaltoallaliga.fragments.SelectSecondTeamFragment;
+
 import io.fabric.sdk.android.Fabric;
 
 

@@ -10,4 +10,6 @@
     <string name="vs" translatable="false">%1$s vs %2$s</string>
     <string name="choose_sharing_app">Share post to</string>
 
+    <string name="network_error">Please check your internet connection</string>
+
 </resources>
