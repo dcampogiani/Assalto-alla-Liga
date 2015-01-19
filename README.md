@@ -1,4 +1,4 @@
-# Assalto alla Liga
+# FantaWinner
 An awesome useless application I've wrote to learn some Android Patterns and API such as:
  - Material Design using support library
  - Floating Action Button
@@ -6,6 +6,10 @@ An awesome useless application I've wrote to learn some Android Patterns and API
  - Dual Pane for tablets using Fragments
  - Fragment comunication using interfaces
  - State save/restore
+ - Content Providers
+ - Proguard
+ - Some web parsing
+ - Fabric
  - Something else I've forgot
  
 ##[Download APK](https://github.com/dcampogiani/Assalto-alla-Liga/raw/master/app/app-release.apk)
@@ -24,3 +28,8 @@ Nexus 7 2013 running Android 5
  - [TextDrawable](https://github.com/amulyakhare/TextDrawable)
  - [Android-Floating-Action-Button](https://github.com/futuresimple/android-floating-action-button)
  - [YesNo.wtf API](http://yesno.wtf/#api)
+ - [ProviGen](https://github.com/TimotheeJeannin/ProviGen)
+ - [MaterialEditText](https://github.com/rengwuxian/MaterialEditText)
+ - [Snackbar](https://github.com/nispok/snackbar)
+ - [Fabric](https://fabric.io/)
+ - [Jsoup](http://jsoup.org/)
