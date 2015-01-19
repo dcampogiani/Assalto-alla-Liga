@@ -12,7 +12,7 @@ An awesome useless application I've wrote to learn some Android Patterns and API
  - Fabric
  - Something else I've forgot
  
-##[Download APK](https://github.com/dcampogiani/Assalto-alla-Liga/raw/master/app/app-release.apk)
+##[Download APK](https://github.com/dcampogiani/FantaWinner/raw/master/app/app-release.apk)
 
 ## Phone UI
 ![Phone UI](/screenshots/smartphone.gif "Phone UI")
