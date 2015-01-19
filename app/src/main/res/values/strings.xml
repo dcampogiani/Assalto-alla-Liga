@@ -1,15 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name" translatable="false">Assalto alla Liga</string>
+    <string name="app_name" translatable="false">FantaWinner</string>
     <string name="choose_home_team">Choose home team</string>
     <string name="choose_away_team">Choose away team</string>
-
     <string name="will_team_win">Will %1$s win?</string>
     <string name="will_team_win_vs">Will %1$s win against %2$s?</string>
     <string name="vs" translatable="false">%1$s vs %2$s</string>
     <string name="choose_sharing_app">Share post to</string>
-
     <string name="network_error">Please check your internet connection</string>
+    <string name="no_teams_in_content_provider">No teams added to application</string>
+    <string name="title_activity_select_lega" translatable="false">SelectLegaActivity</string>
+    <string name="insert_lega_name">Write here the name of your lega</string>
+
+    <string name="no_logo_url" translatable="false">http://leghe.fantagazzetta.com/risorse/squadra/no_logo.png</string>
+    <string name="using_lega">Using %1$s</string>
+    <string name="wrong_lega_name">Please check the name of the league</string>
+    <string name="lega_url" translatable="false">http://leghe.fantagazzetta.com/%1$s/squadre</string>
 
 </resources>

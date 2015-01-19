@@ -24,7 +24,7 @@ android {
         minSdkVersion 14
         targetSdkVersion 21
         versionCode 1
-        versionName "1.0.1"
+        versionName "1.0.2"
     }
     buildTypes {
         release {
@@ -42,7 +42,11 @@ dependencies {
     compile 'com.android.support:recyclerview-v7:21.0.3'
     compile 'com.amulyakhare:com.amulyakhare.textdrawable:1.0.0'
     compile 'com.getbase:floatingactionbutton:1.5.1'
+    compile 'com.github.provigen:ProviGen-lib:2.0.+'
+    compile 'com.rengwuxian.materialedittext:library:1.8.2'
+    compile 'com.nispok:snackbar:2.7.4'
     compile('com.crashlytics.sdk.android:crashlytics:2.2.0@aar') {
         transitive = true;
     }
+    compile 'org.jsoup:jsoup:1.8.1'
 }

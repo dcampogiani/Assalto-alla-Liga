@@ -18,13 +18,21 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".activities.ResultActivity"
             android:label="@string/app_name" />
+
+        <provider
+            android:name=".contentprovider.AssaltoContentProvider"
+            android:authorities="com.danielecampogiani.assaltoallaliga" />
+
         <meta-data
             android:name="com.crashlytics.ApiKey"
             android:value="5c717ce21cf676f788bb7713b2dcc052093cdf36" />
+
+        <activity
+            android:name=".activities.SelectLegaActivity"
+            android:label="@string/title_activity_select_lega"></activity>
     </application>
 
 </manifest>

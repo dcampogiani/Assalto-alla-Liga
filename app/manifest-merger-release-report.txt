@@ -26,6 +26,11 @@ MERGED from com.android.support:recyclerview-v7:21.0.3:17:5
 MERGED from com.android.support:support-v4:21.0.3:16:5
 MERGED from com.amulyakhare:com.amulyakhare.textdrawable:1.0.0:12:5
 MERGED from com.getbase:floatingactionbutton:1.5.1:12:5
+MERGED from com.android.support:appcompat-v7:21.0.3:16:5
+MERGED from com.android.support:support-v4:21.0.3:16:5
+MERGED from com.nispok:snackbar:2.7.4:10:5
+MERGED from com.android.support:recyclerview-v7:21.0.3:17:5
+MERGED from com.android.support:support-v4:21.0.3:16:5
 MERGED from com.crashlytics.sdk.android:crashlytics:2.2.0:13:5
 MERGED from com.crashlytics.sdk.android:answers:1.1.0:11:5
 MERGED from io.fabric.sdk.android:fabric:1.1.0:11:5
@@ -57,17 +62,29 @@ ADDED from AndroidManifest.xml:18:17
 	android:name
 		ADDED from AndroidManifest.xml:18:27
 activity#com.danielecampogiani.assaltoallaliga.activities.ResultActivity
-ADDED from AndroidManifest.xml:22:9
+ADDED from AndroidManifest.xml:21:9
 	android:label
-		ADDED from AndroidManifest.xml:24:13
-	android:name
 		ADDED from AndroidManifest.xml:23:13
-meta-data#com.crashlytics.ApiKey
+	android:name
+		ADDED from AndroidManifest.xml:22:13
+provider#com.danielecampogiani.assaltoallaliga.contentprovider.AssaltoContentProvider
 ADDED from AndroidManifest.xml:25:9
-	android:value
+	android:authorities
 		ADDED from AndroidManifest.xml:27:13
 	android:name
 		ADDED from AndroidManifest.xml:26:13
+meta-data#com.crashlytics.ApiKey
+ADDED from AndroidManifest.xml:29:9
+	android:value
+		ADDED from AndroidManifest.xml:31:13
+	android:name
+		ADDED from AndroidManifest.xml:30:13
+activity#com.danielecampogiani.assaltoallaliga.activities.SelectLegaActivity
+ADDED from AndroidManifest.xml:33:9
+	android:label
+		ADDED from AndroidManifest.xml:35:13
+	android:name
+		ADDED from AndroidManifest.xml:34:13
 uses-sdk
 INJECTED from AndroidManifest.xml:0:0 reason: use-sdk injection requested
 MERGED from com.android.support:appcompat-v7:21.0.3:15:5
@@ -76,6 +93,12 @@ MERGED from com.android.support:recyclerview-v7:21.0.3:15:5
 MERGED from com.android.support:support-v4:21.0.3:15:5
 MERGED from com.amulyakhare:com.amulyakhare.textdrawable:1.0.0:8:5
 MERGED from com.getbase:floatingactionbutton:1.5.1:8:5
+MERGED from com.rengwuxian.materialedittext:library:1.8.2:6:5
+MERGED from com.android.support:appcompat-v7:21.0.3:15:5
+MERGED from com.android.support:support-v4:21.0.3:15:5
+MERGED from com.nispok:snackbar:2.7.4:6:5
+MERGED from com.android.support:recyclerview-v7:21.0.3:15:5
+MERGED from com.android.support:support-v4:21.0.3:15:5
 MERGED from com.crashlytics.sdk.android:crashlytics:2.2.0:7:5
 MERGED from com.crashlytics.sdk.android:answers:1.1.0:7:5
 MERGED from io.fabric.sdk.android:fabric:1.1.0:7:5
@@ -90,6 +113,7 @@ MERGED from io.fabric.sdk.android:fabric:1.1.0:7:5
 		INJECTED from AndroidManifest.xml:0:0
 activity#android.support.v7.widget.TestActivity
 ADDED from com.android.support:recyclerview-v7:21.0.3:18:9
+MERGED from com.android.support:recyclerview-v7:21.0.3:18:9
 	android:label
 		ADDED from com.android.support:recyclerview-v7:21.0.3:18:19
 	android:name

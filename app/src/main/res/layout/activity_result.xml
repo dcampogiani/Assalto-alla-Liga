@@ -79,16 +79,16 @@
 
 
     <TextView
+        android:id="@+id/errorTextView"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-        android:visibility="invisible"
-        android:textColor="@color/primary_text"
-        android:id="@+id/errorTextView"
+        android:layout_gravity="center"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
-        tools:text="HARD"
-        android:layout_gravity="center" />
+        android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+        android:textColor="@color/primary_text"
+        android:visibility="invisible"
+        tools:text="HARD" />
 
 
     <ProgressBar

@@ -2,9 +2,12 @@ package com.danielecampogiani.assaltoallaliga.fragments;
 
 import android.app.Activity;
 import android.content.Context;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -14,16 +17,17 @@ import android.view.ViewGroup;
 
 import com.danielecampogiani.assaltoallaliga.R;
 import com.danielecampogiani.assaltoallaliga.adapters.TeamListItemAdapter;
-import com.danielecampogiani.assaltoallaliga.managers.TeamsManager;
 import com.danielecampogiani.assaltoallaliga.model.Team;
+import com.danielecampogiani.assaltoallaliga.support.DBHelper;
 import com.danielecampogiani.assaltoallaliga.support.RecyclerItemClickListener;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by danielecampogiani on 14/01/15.
  */
-public class SelectFirstTeamFragment extends Fragment {
+public class SelectFirstTeamFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final String SELECTED_TEAM_NAME_KEY = "SELECTED_TEAM_NAME_KEY";
     private static final String SELECTED_INDEX_KEY = "SELECTED_INDEX_KEY";
@@ -33,6 +37,8 @@ public class SelectFirstTeamFragment extends Fragment {
     private TeamListItemAdapter mTeamListItemAdapter;
     private int mSelectedIndex;
     private HomeTeamSelectedListener mHomeTeamSelectedListener;
+    private RecyclerView mRecyclerView;
+    private String mSelectedTeamName;
 
     public static SelectFirstTeamFragment newInstance() {
         return new SelectFirstTeamFragment();
@@ -49,19 +55,10 @@ public class SelectFirstTeamFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mTeams = TeamsManager.getInstance().getTeams();
         mSelectedIndex = -1;
         if (getArguments() != null) {
-            String teamName = getArguments().getString(SELECTED_TEAM_NAME_KEY, "");
-            if (!teamName.equals("")) {
-                for (Team currentTeam : mTeams) {
-                    if (currentTeam.getName().equalsIgnoreCase(teamName)) {
-                        mSelectedIndex = mTeams.indexOf(currentTeam);
-                        break;
-                    }
-                }
-            }
-        }
+            mSelectedTeamName = getArguments().getString(SELECTED_TEAM_NAME_KEY, "");
+        } else mSelectedTeamName = "";
     }
 
     @Override
@@ -73,7 +70,6 @@ public class SelectFirstTeamFragment extends Fragment {
             mHomeTeamSelectedListener = (HomeTeamSelectedListener) activity;
 
         mContext = mActionBarActivity;
-
         super.onAttach(activity);
     }
 
@@ -81,9 +77,8 @@ public class SelectFirstTeamFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View root = inflater.inflate(R.layout.fragment_teams_list, container, false);
-        mTeamListItemAdapter = new TeamListItemAdapter(mTeams.toArray(new Team[mTeams.size()]), mContext);
 
-        RecyclerView mRecyclerView = (RecyclerView) root.findViewById(R.id.list_view);
+        mRecyclerView = (RecyclerView) root.findViewById(R.id.list_view);
 
         // use this setting to improve performance if you know that changes
         // in content do not change the layout size of the RecyclerView
@@ -93,7 +88,6 @@ public class SelectFirstTeamFragment extends Fragment {
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(mContext);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        mRecyclerView.setAdapter(mTeamListItemAdapter);
 
         if (savedInstanceState != null)
             mSelectedIndex = savedInstanceState.getInt(SELECTED_INDEX_KEY, -1);
@@ -111,6 +105,8 @@ public class SelectFirstTeamFragment extends Fragment {
 
         mActionBarActivity.getSupportActionBar().setTitle(getString(R.string.choose_home_team));
 
+        getLoaderManager().initLoader(0, null, this);
+
         return root;
 
     }
@@ -121,6 +117,38 @@ public class SelectFirstTeamFragment extends Fragment {
             outState.putInt(SELECTED_INDEX_KEY, mSelectedIndex);
         super.onSaveInstanceState(outState);
     }
+
+    @Override
+    public android.support.v4.content.Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        String[] projection = new String[]{Team.TeamContract._ID, Team.TeamContract.NAME, Team.TeamContract.LOGO};
+        return new CursorLoader(mContext, Team.TeamContract.CONTENT_URI, projection, null, null, Team.TeamContract._ID + " DESC");
+    }
+
+    @Override
+    public void onLoadFinished(android.support.v4.content.Loader<Cursor> loader, Cursor data) {
+        if (data != null) {
+            data.moveToPosition(-1);
+            mTeams = DBHelper.getTeamsFromCursor(data);
+            if (!mSelectedTeamName.equals("")) {
+                for (Team currentTeam : mTeams) {
+                    if (currentTeam.getName().equalsIgnoreCase(mSelectedTeamName)) {
+                        mSelectedIndex = mTeams.indexOf(currentTeam);
+                        break;
+                    }
+                }
+            }
+            mTeamListItemAdapter = new TeamListItemAdapter(mTeams.toArray(new Team[mTeams.size()]), mContext);
+            mRecyclerView.setAdapter(mTeamListItemAdapter);
+        }
+    }
+
+    @Override
+    public void onLoaderReset(android.support.v4.content.Loader<Cursor> loader) {
+        mTeams = new ArrayList<>();
+        mTeamListItemAdapter = new TeamListItemAdapter(mTeams.toArray(new Team[mTeams.size()]), mContext);
+        mRecyclerView.setAdapter(mTeamListItemAdapter);
+    }
+
 
     public interface HomeTeamSelectedListener {
         public void onHomeTeamSelected(String teamName);

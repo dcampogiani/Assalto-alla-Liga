@@ -15,3 +15,18 @@
 #-keepclassmembers class fqcn.of.javascript.interface.for.webview {
 #   public *;
 #}
+
+
+-keepnames class ** {
+@com.tjeannin.provigen.** public *;
+}
+-keepclassmembers class * {
+@com.tjeannin.provigen.** public *;
+}
+
+-keep class * extends com.tjeannin.provigen.ProviGenBaseContract
+-keep @com.tjeannin.provigen.** public class *
+-keep @com.tjeannin.provigen.** public interface *
+
+-dontwarn com.tjeannin.provigen.**
+-keep class com.tjeannin.provigen.** { *; }

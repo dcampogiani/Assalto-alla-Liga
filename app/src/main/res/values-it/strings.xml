@@ -7,5 +7,9 @@
     <string name="choose_sharing_app">Condividi con</string>
     <string name="will_team_win_vs">%1$s vincerà contro %2$s?</string>
     <string name="network_error">Controlla la tua connessione ad internet</string>
+    <string name="no_teams_in_content_provider">Non ci sono squadre</string>
+    <string name="insert_lega_name">Scrivi il nome della lega</string>
+    <string name="using_lega">Sto usando %1$s</string>
+    <string name="wrong_lega_name">Controlla il nome della lega</string>
 
 </resources>

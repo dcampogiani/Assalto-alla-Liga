@@ -1,6 +1,9 @@
 package com.danielecampogiani.assaltoallaliga.adapters;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.util.TypedValue;
@@ -13,6 +16,8 @@ import com.amulyakhare.textdrawable.TextDrawable;
 import com.amulyakhare.textdrawable.util.ColorGenerator;
 import com.danielecampogiani.assaltoallaliga.R;
 import com.danielecampogiani.assaltoallaliga.model.Team;
+import com.koushikdutta.async.future.FutureCallback;
+import com.koushikdutta.ion.Ion;
 
 /**
  * Created by danielecampogiani on 14/01/15.
@@ -47,10 +52,23 @@ public class TeamListItemAdapter extends RecyclerView.Adapter<TeamListItemAdapte
         Team item = mDataSet[position];
 
         holder.textView.setText(item.getName());
+        Drawable transparentDrawable = new ColorDrawable(android.R.color.transparent);
+        int size = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 32, mContext.getResources().getDisplayMetrics());
+        transparentDrawable.setBounds(0, 0, size, size);
+        holder.textView.setCompoundDrawables(transparentDrawable, null, null, null);
+        final ViewHolder finalHolder = holder;
 
-        if (item.getLogoName() != null)
-            holder.textView.setCompoundDrawablesWithIntrinsicBounds(getImage(mContext, item.getLogoName()), null, null, null);
-        else {
+        if (!item.getLogoPath().equals(mContext.getString(R.string.no_logo_url))) {
+            Ion.with(mContext).load(item.getLogoPath()).asBitmap().setCallback(new FutureCallback<Bitmap>() {
+                @Override
+                public void onCompleted(Exception e, Bitmap result) {
+                    final Drawable drawable = new BitmapDrawable(mContext.getResources(), result);
+                    int size = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 32, mContext.getResources().getDisplayMetrics());
+                    drawable.setBounds(0, 0, size, size);
+                    finalHolder.textView.setCompoundDrawables(drawable, null, null, null);
+                }
+            });
+        } else {
             String[] initialsArray = item.getName().split(" ");
             StringBuilder initialsBuilder = new StringBuilder();
             if (initialsArray.length >= 2) {
@@ -60,7 +78,6 @@ public class TeamListItemAdapter extends RecyclerView.Adapter<TeamListItemAdapte
                 initialsBuilder.append(item.getName().charAt(0));
             Drawable drawable = TextDrawable.builder().buildRect(initialsBuilder.toString().toUpperCase(), ColorGenerator.DEFAULT.getColor(item.getName()));
             //int intrinsicH = drawable.getIntrinsicHeight();
-            int size = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 32, mContext.getResources().getDisplayMetrics());
             drawable.setBounds(0, 0, size, size);
             holder.textView.setCompoundDrawables(drawable, null, null, null);
         }
@@ -93,6 +110,7 @@ public class TeamListItemAdapter extends RecyclerView.Adapter<TeamListItemAdapte
             textView = (TextView) v.findViewById(R.id.textView);
         }
 
-
     }
+
+
 }
