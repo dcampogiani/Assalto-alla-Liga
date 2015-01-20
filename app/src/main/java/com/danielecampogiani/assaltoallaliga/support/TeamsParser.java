@@ -19,6 +19,15 @@ import java.util.List;
 public class TeamsParser {
 
     public static void parseTeams(final String html, final TeamsParserListener listener) {
+
+        if (html == null)
+            throw new NullPointerException("html can't be null");
+        else if ("".equals(html))
+            throw new IllegalArgumentException("html can't be empty");
+
+        if (listener == null)
+            throw new NullPointerException("listener can't be null");
+
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
@@ -39,7 +48,7 @@ public class TeamsParser {
                     teams.add(team);
                 }
 
-                if (teams != null) {
+                if (teams.size() > 0) {
                     Handler handler = new Handler(Looper.getMainLooper());
                     handler.post(new Runnable() {
                         @Override

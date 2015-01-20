@@ -141,7 +141,7 @@ public class ResultActivity extends ActionBarActivity {
                     else
                         swipeRefreshLayout.setRefreshing(false);
                 } else {
-                    showError("", false);
+                    showError(null, false);
                     mCurrentImageUrl = result.get("image").getAsString();
 
                     Ion.with(imageView).animateIn(mImageAnimation).centerCrop().load(mCurrentImageUrl).setCallback(new FutureCallback<ImageView>() {
@@ -150,7 +150,7 @@ public class ResultActivity extends ActionBarActivity {
                             if (e != null)
                                 showError(getString(R.string.network_error), true);
                             else {
-                                showError("", false);
+                                showError(null, false);
                                 if (firstRun)
                                     showLoading(false);
                                 else
@@ -205,6 +205,11 @@ public class ResultActivity extends ActionBarActivity {
     }
 
     private void showError(String text, boolean show) {
+
+        if (text == null && show)
+            throw new NullPointerException("text can't be null");
+        if ("".equals(text) && show)
+            throw new IllegalArgumentException("text can't be empty");
 
         if (show) {
             Animation animation = new AlphaAnimation(0, 1);

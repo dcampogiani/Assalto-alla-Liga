@@ -133,7 +133,7 @@ public class SelectLegaActivity extends ActionBarActivity {
                         showError(getString(R.string.network_error), true);
                         showLoading(false);
                     } else {
-                        showError("", false);
+                        showError(null, false);
 
                         TeamsParser.parseTeams(result, new TeamsParser.TeamsParserListener() {
                             @Override
@@ -227,6 +227,11 @@ public class SelectLegaActivity extends ActionBarActivity {
     }
 
     private void showError(String text, boolean show) {
+
+        if (text == null && show)
+            throw new NullPointerException("text can't be null");
+        if ("".equals(text) && show)
+            throw new IllegalArgumentException("text can't be empty");
 
         if (show) {
             Animation animation = new AlphaAnimation(0, 1);

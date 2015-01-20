@@ -22,6 +22,10 @@ public class Team {
     }
 
     public void setName(String name) {
+        if (name == null)
+            throw new NullPointerException("name can't be null");
+        else if ("".equals(name))
+            throw new IllegalArgumentException("name can't be empty");
         this.name = name;
     }
 
@@ -30,6 +34,10 @@ public class Team {
     }
 
     public void setLogoPath(String logoPath) {
+        if (logoPath == null)
+            throw new NullPointerException("logoPath can't be null");
+        else if ("".equals(logoPath))
+            throw new IllegalArgumentException("logoPath can't be empty");
         this.logoPath = logoPath;
     }
 

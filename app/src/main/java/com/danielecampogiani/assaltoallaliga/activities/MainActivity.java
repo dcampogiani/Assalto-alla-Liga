@@ -34,6 +34,8 @@ public class MainActivity extends ActionBarActivity implements SelectFirstTeamFr
     private boolean mIsDualPane;
 
     private void switchSingleFragment(Fragment newFragment) {
+        if (newFragment == null)
+            throw new NullPointerException("newFragment can't be null");
         getSupportFragmentManager().beginTransaction().setCustomAnimations(android.R.anim.fade_in, android.R.anim.slide_out_right).replace(R.id.container, newFragment).addToBackStack(null).commit();
     }
 
@@ -120,6 +122,10 @@ public class MainActivity extends ActionBarActivity implements SelectFirstTeamFr
 
     @Override
     public void onHomeTeamSelected(String teamName) {
+        if (teamName == null)
+            throw new NullPointerException("teamName can't be null");
+        else if ("".equals(teamName))
+            throw new IllegalArgumentException("teamName can't be empty");
         mHomeTeamName = teamName;
         SelectSecondTeamFragment selectSecondTeamFragment = SelectSecondTeamFragment.newInstance(mHomeTeamName);
         if (mIsDualPane)
@@ -132,6 +138,10 @@ public class MainActivity extends ActionBarActivity implements SelectFirstTeamFr
 
     @Override
     public void onAwayTeamSelected(String teamName) {
+        if (teamName == null)
+            throw new NullPointerException("teamName can't be null");
+        else if ("".equals(teamName))
+            throw new IllegalArgumentException("teamName can't be empty");
         mAwayTeamName = teamName;
         goToResultActivity();
     }

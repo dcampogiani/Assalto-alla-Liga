@@ -29,7 +29,9 @@ public class ThreadsManager {
     private ThreadsManager() {
     }
 
-    static public void execute(final Runnable background) {
-        sInstance.mThreadPool.execute(background);
+    static public void execute(final Runnable doInBackground) {
+        if (doInBackground == null)
+            throw new NullPointerException("doInBackground can't be null");
+        sInstance.mThreadPool.execute(doInBackground);
     }
 }

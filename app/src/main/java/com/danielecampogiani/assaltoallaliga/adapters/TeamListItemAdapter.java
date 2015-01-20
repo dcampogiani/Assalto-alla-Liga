@@ -30,13 +30,13 @@ public class TeamListItemAdapter extends RecyclerView.Adapter<TeamListItemAdapte
     private int mSelectedItem;
 
     public TeamListItemAdapter(Team[] myDataSet, Context myContext) {
+        if (myDataSet == null)
+            throw new NullPointerException("myDataSet can't be null");
+        if (myContext == null)
+            throw new NullPointerException("myContext can't be null");
         mDataSet = myDataSet;
         mContext = myContext;
         mSelectedItem = -1;
-    }
-
-    private static Drawable getImage(Context context, String name) {
-        return context.getResources().getDrawable(context.getResources().getIdentifier(name, "drawable", context.getPackageName()));
     }
 
     @Override

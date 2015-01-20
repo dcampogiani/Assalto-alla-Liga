@@ -15,6 +15,9 @@ public class DBHelper {
 
     public static List<Team> getTeamsFromContentValues(List<ContentValues> values) {
 
+        if (values == null)
+            throw new NullPointerException("values can't be null");
+
         List<Team> result = new ArrayList<>(values.size());
 
         for (ContentValues current : values) {
@@ -29,6 +32,9 @@ public class DBHelper {
 
     public static List<Team> getTeamsFromCursor(Cursor cursor) {
 
+        if (cursor == null)
+            throw new NullPointerException("cursor can't be null");
+
         List<Team> result = new ArrayList<>(cursor.getCount());
 
         while (cursor.moveToNext()) {
@@ -42,6 +48,10 @@ public class DBHelper {
     }
 
     public static List<ContentValues> getContentValuesFromTeams(List<Team> teams) {
+
+        if (teams == null)
+            throw new NullPointerException("teams can't be null");
+
         List<ContentValues> result = new ArrayList<>(teams.size());
         for (Team currentTeam : teams) {
             ContentValues current = new ContentValues();
