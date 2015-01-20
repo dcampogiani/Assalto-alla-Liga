@@ -75,7 +75,12 @@ public class MainActivity extends ActionBarActivity implements SelectFirstTeamFr
             if (mIsDualPane != oldValue) {//rotated
 
                 if (mIsDualPane) {
-                    getSupportFragmentManager().beginTransaction().replace(R.id.left_container, SelectFirstTeamFragment.newInstance(mHomeTeamName)).commit();
+                    SelectFirstTeamFragment selectFirstTeamFragment;
+                    if ("".equals(mHomeTeamName))
+                        selectFirstTeamFragment = SelectFirstTeamFragment.newInstance();
+                    else
+                        selectFirstTeamFragment = SelectFirstTeamFragment.newInstance(mHomeTeamName);
+                    getSupportFragmentManager().beginTransaction().replace(R.id.left_container, selectFirstTeamFragment).commit();
 
                     if (mAwayTeamName.equalsIgnoreCase(""))
                         getSupportFragmentManager().beginTransaction().replace(R.id.right_container, InfoFragment.newInstance(getString(R.string.choose_home_team))).commit();
@@ -89,7 +94,12 @@ public class MainActivity extends ActionBarActivity implements SelectFirstTeamFr
                         getSupportFragmentManager().beginTransaction().replace(R.id.container, SelectFirstTeamFragment.newInstance()).commit();
                     else {
                         getSupportFragmentManager().beginTransaction().replace(R.id.container, SelectFirstTeamFragment.newInstance(mHomeTeamName)).commit();
-                        getSupportFragmentManager().beginTransaction().replace(R.id.container, SelectSecondTeamFragment.newInstance(mHomeTeamName, mAwayTeamName)).addToBackStack(null).commit();
+                        SelectSecondTeamFragment selectSecondTeamFragment;
+                        if ("".equals(mAwayTeamName))
+                            selectSecondTeamFragment = SelectSecondTeamFragment.newInstance(mHomeTeamName);
+                        else
+                            selectSecondTeamFragment = SelectSecondTeamFragment.newInstance(mHomeTeamName, mAwayTeamName);
+                        getSupportFragmentManager().beginTransaction().replace(R.id.container, selectSecondTeamFragment).addToBackStack(null).commit();
 
 
                     }
