@@ -44,6 +44,10 @@ public class SelectSecondTeamFragment extends Fragment implements LoaderManager.
     private String mSelectedTeamName;
 
     public static SelectSecondTeamFragment newInstance(String hiddenTeamName) {
+        if (hiddenTeamName == null)
+            throw new NullPointerException("hiddenTeamName can't be null");
+        else if ("".equals(hiddenTeamName))
+            throw new IllegalArgumentException("hiddenTeamName can't be empty");
         SelectSecondTeamFragment result = new SelectSecondTeamFragment();
         Bundle args = new Bundle();
         args.putString(SelectSecondTeamFragment.HIDDEN_TEAM_NAME_KEY, hiddenTeamName);
@@ -52,6 +56,14 @@ public class SelectSecondTeamFragment extends Fragment implements LoaderManager.
     }
 
     public static SelectSecondTeamFragment newInstance(String hiddenTeamName, String selectedTeamName) {
+        if (hiddenTeamName == null)
+            throw new NullPointerException("hiddenTeamName can't be null");
+        else if ("".equals(hiddenTeamName))
+            throw new IllegalArgumentException("hiddenTeamName can't be empty");
+        if (selectedTeamName == null)
+            throw new NullPointerException("selectedTeamName can't be null");
+        else if ("".equals(selectedTeamName))
+            throw new IllegalArgumentException("selectedTeamName can't be empty");
         SelectSecondTeamFragment result = new SelectSecondTeamFragment();
         Bundle args = new Bundle();
         args.putString(SelectSecondTeamFragment.HIDDEN_TEAM_NAME_KEY, hiddenTeamName);
@@ -64,8 +76,12 @@ public class SelectSecondTeamFragment extends Fragment implements LoaderManager.
     public void onAttach(Activity activity) {
         if (activity instanceof ActionBarActivity)
             mActionBarActivity = (ActionBarActivity) activity;
+        else
+            throw new RuntimeException("Parent activity of SelectFirstTeamFragment must be an ActionBarActivity");
         if (activity instanceof AwayTeamSelectedListener)
             mAwayTeamSelectedListener = (AwayTeamSelectedListener) activity;
+        else
+            throw new RuntimeException("Parent activity of SelectFirstTeamFragment must implement AwayTeamSelectedListener");
 
         mContext = activity;
         super.onAttach(activity);
@@ -79,6 +95,8 @@ public class SelectSecondTeamFragment extends Fragment implements LoaderManager.
 
         if (getArguments() != null) {
             mTeamToHide = getArguments().getString(HIDDEN_TEAM_NAME_KEY, "");
+            if ("".equals(mTeamToHide))
+                throw new RuntimeException("mTeamToHide can't be empty");
             mSelectedTeamName = getArguments().getString(SELECTED_TEAM_NAME_KEY, "");
         } else {
             mTeamToHide = "";
@@ -102,8 +120,6 @@ public class SelectSecondTeamFragment extends Fragment implements LoaderManager.
 
         if (savedInstanceState != null)
             mSelectedIndex = savedInstanceState.getInt(SELECTED_INDEX_KEY, -1);
-        if (mSelectedIndex >= 0)
-            mTeamListItemAdapter.setSelectedItem(mSelectedIndex);
 
         mRecyclerView.addOnItemTouchListener(new RecyclerItemClickListener(mContext, new RecyclerItemClickListener.OnItemClickListener() {
             @Override
@@ -155,7 +171,10 @@ public class SelectSecondTeamFragment extends Fragment implements LoaderManager.
                 }
             }
             mTeamListItemAdapter = new TeamListItemAdapter(mTeams.toArray(new Team[mTeams.size()]), mContext);
+            if (mSelectedIndex >= 0)
+                mTeamListItemAdapter.setSelectedItem(mSelectedIndex);
             mRecyclerView.setAdapter(mTeamListItemAdapter);
+
         }
 
     }

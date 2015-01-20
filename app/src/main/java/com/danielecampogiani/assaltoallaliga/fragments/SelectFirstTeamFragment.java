@@ -45,6 +45,10 @@ public class SelectFirstTeamFragment extends Fragment implements LoaderManager.L
     }
 
     public static SelectFirstTeamFragment newInstance(String selectedTeamName) {
+        if (selectedTeamName == null)
+            throw new NullPointerException("selectedTeamName can't be null");
+        else if ("".equals(selectedTeamName))
+            throw new IllegalArgumentException("selectedTeam can't be empty");
         SelectFirstTeamFragment result = new SelectFirstTeamFragment();
         Bundle args = new Bundle();
         args.putString(SELECTED_TEAM_NAME_KEY, selectedTeamName);
@@ -65,9 +69,13 @@ public class SelectFirstTeamFragment extends Fragment implements LoaderManager.L
     public void onAttach(Activity activity) {
         if (activity instanceof ActionBarActivity)
             mActionBarActivity = (ActionBarActivity) activity;
+        else
+            throw new RuntimeException("Parent activity of SelectFirstTeamFragment must be an ActionBarActivity");
 
         if (activity instanceof HomeTeamSelectedListener)
             mHomeTeamSelectedListener = (HomeTeamSelectedListener) activity;
+        else
+            throw new RuntimeException("Parent activity of SelectFirstTeamFragment must implement HomeTeamSelectedListener");
 
         mContext = mActionBarActivity;
         super.onAttach(activity);
@@ -91,8 +99,6 @@ public class SelectFirstTeamFragment extends Fragment implements LoaderManager.L
 
         if (savedInstanceState != null)
             mSelectedIndex = savedInstanceState.getInt(SELECTED_INDEX_KEY, -1);
-        if (mSelectedIndex >= 0)
-            mTeamListItemAdapter.setSelectedItem(mSelectedIndex);
 
         mRecyclerView.addOnItemTouchListener(new RecyclerItemClickListener(mContext, new RecyclerItemClickListener.OnItemClickListener() {
             @Override
@@ -138,6 +144,8 @@ public class SelectFirstTeamFragment extends Fragment implements LoaderManager.L
                 }
             }
             mTeamListItemAdapter = new TeamListItemAdapter(mTeams.toArray(new Team[mTeams.size()]), mContext);
+            if (mSelectedIndex >= 0)
+                mTeamListItemAdapter.setSelectedItem(mSelectedIndex);
             mRecyclerView.setAdapter(mTeamListItemAdapter);
         }
     }
