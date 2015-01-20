@@ -127,7 +127,7 @@ public class SelectFirstTeamFragment extends Fragment implements LoaderManager.L
     @Override
     public android.support.v4.content.Loader<Cursor> onCreateLoader(int id, Bundle args) {
         String[] projection = new String[]{Team.TeamContract._ID, Team.TeamContract.NAME, Team.TeamContract.LOGO};
-        return new CursorLoader(mContext, Team.TeamContract.CONTENT_URI, projection, null, null, Team.TeamContract._ID + " DESC");
+        return new CursorLoader(mContext, Team.TeamContract.CONTENT_URI, projection, null, null, Team.TeamContract.NAME);
     }
 
     @Override

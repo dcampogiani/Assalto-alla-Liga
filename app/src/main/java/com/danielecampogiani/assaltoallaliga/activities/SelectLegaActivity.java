@@ -29,6 +29,7 @@ import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 import com.rengwuxian.materialedittext.MaterialEditText;
 
+import java.util.Collections;
 import java.util.List;
 
 public class SelectLegaActivity extends ActionBarActivity {
@@ -144,6 +145,9 @@ public class SelectLegaActivity extends ActionBarActivity {
                                     showLoading(false);
                                 } else {
                                     mTeams = teams;
+
+                                    Collections.sort(mTeams);
+
                                     mTeamListItemAdapter = new TeamListItemAdapter(mTeams.toArray(new Team[mTeams.size()]), SelectLegaActivity.this);
                                     mRecyclerView.setAdapter(mTeamListItemAdapter);
                                     showFAB(true);

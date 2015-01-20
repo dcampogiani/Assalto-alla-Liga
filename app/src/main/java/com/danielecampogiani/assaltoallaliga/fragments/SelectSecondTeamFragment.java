@@ -148,7 +148,7 @@ public class SelectSecondTeamFragment extends Fragment implements LoaderManager.
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         String[] projection = new String[]{Team.TeamContract._ID, Team.TeamContract.NAME, Team.TeamContract.LOGO};
-        return new CursorLoader(mContext, Team.TeamContract.CONTENT_URI, projection, null, null, Team.TeamContract._ID + " DESC");
+        return new CursorLoader(mContext, Team.TeamContract.CONTENT_URI, projection, null, null, Team.TeamContract.NAME);
     }
 
     @Override

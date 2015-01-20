@@ -11,7 +11,7 @@ import com.tjeannin.provigen.annotation.ContentUri;
  * Created by danielecampogiani on 14/01/15.
  */
 
-public class Team {
+public class Team implements Comparable<Team> {
 
 
     private String name;
@@ -39,6 +39,33 @@ public class Team {
         else if ("".equals(logoPath))
             throw new IllegalArgumentException("logoPath can't be empty");
         this.logoPath = logoPath;
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Team team = (Team) o;
+
+        if (!name.equals(team.name)) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return name.hashCode();
+    }
+
+    @Override
+    public int compareTo(Team another) {
+
+        if (another == null)
+            return 1;
+        return name.compareTo(another.getName());
+
     }
 
     public interface TeamContract extends ProviGenBaseContract {
