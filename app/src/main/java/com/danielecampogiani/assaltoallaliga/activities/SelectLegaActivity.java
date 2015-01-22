@@ -11,10 +11,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
-import android.view.animation.AccelerateInterpolator;
-import android.view.animation.AlphaAnimation;
-import android.view.animation.Animation;
-import android.view.animation.TranslateAnimation;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -24,6 +20,7 @@ import com.danielecampogiani.assaltoallaliga.adapters.TeamListItemAdapter;
 import com.danielecampogiani.assaltoallaliga.model.Team;
 import com.danielecampogiani.assaltoallaliga.support.DBHelper;
 import com.danielecampogiani.assaltoallaliga.support.TeamsParser;
+import com.danielecampogiani.assaltoallaliga.support.ViewUtils;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
@@ -90,12 +87,12 @@ public class SelectLegaActivity extends ActionBarActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showFAB(false);
-                showLoading(true);
+                ViewUtils.toggleFab(fab, false);
+                ViewUtils.toggleAlpha(mProgressbar, true);
                 List<ContentValues> contentValues = DBHelper.getContentValuesFromTeams(mTeams);
                 ContentValues[] valuesArray = contentValues.toArray(new ContentValues[contentValues.size()]);
                 getContentResolver().bulkInsert(Team.TeamContract.CONTENT_URI, valuesArray);
-                showLoading(false);
+                ViewUtils.toggleAlpha(mProgressbar, false);
                 Intent resultIntent = new Intent();
                 resultIntent.putExtra(RESULT_KEY, mMaterialEditText.getText().toString());
                 setResult(RESULT_OK, resultIntent);
@@ -120,7 +117,8 @@ public class SelectLegaActivity extends ActionBarActivity {
 
         if (mMaterialEditText.getText() != null && !mMaterialEditText.getText().toString().equals("")) {
 
-            showLoading(true);
+            ViewUtils.toggleAlpha(mProgressbar, true);
+
 
             String leagueNameFormatted = mMaterialEditText.getText().toString().toLowerCase().replace(" ", "-");
             if (leagueNameFormatted.charAt(leagueNameFormatted.length() - 1) == '-')
@@ -131,18 +129,20 @@ public class SelectLegaActivity extends ActionBarActivity {
                 @Override
                 public void onCompleted(Exception e, String result) {
                     if (e != null) {
-                        showError(getString(R.string.network_error), true);
-                        showLoading(false);
+                        ViewUtils.toggleError(mErrorTextView, getString(R.string.network_error), true);
+                        ViewUtils.toggleAlpha(mProgressbar, false);
+
                     } else {
-                        showError(null, false);
+                        ViewUtils.toggleError(mErrorTextView, null, false);
 
                         TeamsParser.parseTeams(result, new TeamsParser.TeamsParserListener() {
                             @Override
                             public void onTeamsParsed(List<Team> teams) {
 
                                 if (teams.size() == 0) {
-                                    showError(getString(R.string.wrong_lega_name), true);
-                                    showLoading(false);
+                                    ViewUtils.toggleError(mErrorTextView, getString(R.string.wrong_lega_name), true);
+                                    ViewUtils.toggleAlpha(mProgressbar, false);
+
                                 } else {
                                     mTeams = teams;
 
@@ -150,8 +150,9 @@ public class SelectLegaActivity extends ActionBarActivity {
 
                                     mTeamListItemAdapter = new TeamListItemAdapter(mTeams.toArray(new Team[mTeams.size()]), SelectLegaActivity.this);
                                     mRecyclerView.setAdapter(mTeamListItemAdapter);
-                                    showFAB(true);
-                                    showLoading(false);
+                                    ViewUtils.toggleFab(fab, true);
+                                    ViewUtils.toggleAlpha(mProgressbar, false);
+
                                 }
                             }
                         });
@@ -164,110 +165,4 @@ public class SelectLegaActivity extends ActionBarActivity {
         }
     }
 
-    private void showFAB(boolean show) {
-        if (show) {
-            TranslateAnimation animation = new TranslateAnimation(0, 0, 400, 0);
-            animation.setDuration(300);
-            animation.setInterpolator(new AccelerateInterpolator());
-            animation.setFillAfter(true);
-            fab.setVisibility(View.VISIBLE);
-            fab.startAnimation(animation);
-        } else {
-            if (fab.getVisibility() == View.VISIBLE) {
-                TranslateAnimation animation = new TranslateAnimation(0, 0, 0, 400);
-                animation.setFillAfter(true);
-                animation.setInterpolator(new AccelerateInterpolator());
-                animation.setDuration(300);
-                animation.setAnimationListener(new Animation.AnimationListener() {
-                    @Override
-                    public void onAnimationStart(Animation animation) {
-
-                    }
-
-                    @Override
-                    public void onAnimationEnd(Animation animation) {
-                        fab.setVisibility(View.INVISIBLE);
-                    }
-
-                    @Override
-                    public void onAnimationRepeat(Animation animation) {
-
-                    }
-                });
-                fab.startAnimation(animation);
-            }
-        }
-    }
-
-    private void showLoading(boolean value) {
-        if (value) {
-            Animation animation = new AlphaAnimation(0, 1);
-            animation.setInterpolator(new AccelerateInterpolator());
-            mProgressbar.setVisibility(View.VISIBLE);
-            mProgressbar.startAnimation(animation);
-
-        } else if (mProgressbar.getVisibility() == View.VISIBLE) {
-            Animation animation = new AlphaAnimation(1, 0);
-            animation.setInterpolator(new AccelerateInterpolator());
-            animation.setAnimationListener(new Animation.AnimationListener() {
-                @Override
-                public void onAnimationStart(Animation animation) {
-
-                }
-
-                @Override
-                public void onAnimationEnd(Animation animation) {
-                    mProgressbar.setVisibility(View.INVISIBLE);
-                }
-
-                @Override
-                public void onAnimationRepeat(Animation animation) {
-
-                }
-            });
-
-            mProgressbar.startAnimation(animation);
-        }
-    }
-
-    private void showError(String text, boolean show) {
-
-        if (text == null && show)
-            throw new NullPointerException("text can't be null");
-        if ("".equals(text) && show)
-            throw new IllegalArgumentException("text can't be empty");
-
-        if (show) {
-            Animation animation = new AlphaAnimation(0, 1);
-            animation.setInterpolator(new AccelerateInterpolator());
-            mErrorTextView.setText(text);
-            mErrorTextView.setVisibility(View.VISIBLE);
-            mErrorTextView.startAnimation(animation);
-
-        } else if (mErrorTextView.getVisibility() == View.VISIBLE) {
-            Animation animation = new AlphaAnimation(1, 0);
-            animation.setInterpolator(new AccelerateInterpolator());
-            animation.setAnimationListener(new Animation.AnimationListener() {
-                @Override
-                public void onAnimationStart(Animation animation) {
-
-                }
-
-                @Override
-                public void onAnimationEnd(Animation animation) {
-                    mErrorTextView.setText("");
-                    mErrorTextView.setVisibility(View.INVISIBLE);
-                }
-
-                @Override
-                public void onAnimationRepeat(Animation animation) {
-
-                }
-            });
-
-            mErrorTextView.startAnimation(animation);
-        }
-
-
-    }
 }

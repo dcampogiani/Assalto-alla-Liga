@@ -48,15 +48,14 @@ public class TeamsParser {
                     teams.add(team);
                 }
 
-                if (teams.size() > 0) {
-                    Handler handler = new Handler(Looper.getMainLooper());
-                    handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            listener.onTeamsParsed(teams);
-                        }
-                    });
-                }
+                Handler handler = new Handler(Looper.getMainLooper());
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        listener.onTeamsParsed(teams);
+                    }
+                });
+
             }
         };
         ThreadsManager.execute(runnable);

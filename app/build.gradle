@@ -49,4 +49,5 @@ dependencies {
         transitive = true;
     }
     compile 'org.jsoup:jsoup:1.8.1'
+    compile 'com.nineoldandroids:library:2.4.0'
 }

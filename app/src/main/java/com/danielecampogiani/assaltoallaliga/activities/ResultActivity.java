@@ -15,6 +15,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.danielecampogiani.assaltoallaliga.R;
+import com.danielecampogiani.assaltoallaliga.support.ViewUtils;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.google.gson.JsonObject;
 import com.koushikdutta.async.future.FutureCallback;
@@ -65,7 +66,7 @@ public class ResultActivity extends ActionBarActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showFAB(false);
+                ViewUtils.toggleFab(fab, false);
                 Intent sendIntent = new Intent();
                 sendIntent.setAction(Intent.ACTION_SEND);
                 sendIntent.setType("text/plain");
@@ -99,8 +100,8 @@ public class ResultActivity extends ActionBarActivity {
                 Ion.with(imageView).animateIn(mImageAnimation).centerCrop().load(mCurrentImageUrl).setCallback(new FutureCallback<ImageView>() {
                     @Override
                     public void onCompleted(Exception e, ImageView result) {
-                        showLoading(false);
-                        showFAB(true);
+                        ViewUtils.toggleAlpha(progressBar, false);
+                        ViewUtils.toggleFab(fab, true);
                         mToolbarBackground.setBackgroundColor(getResources().getColor(android.R.color.transparent));
                         mToolbar.setSubtitleTextColor(getResources().getColor(R.color.accent));
                     }
@@ -129,33 +130,33 @@ public class ResultActivity extends ActionBarActivity {
 
     private void doStuff(final boolean firstRun) {
 
-        showFAB(false);
+        ViewUtils.toggleFab(fab, false);
 
         Ion.with(this).load("http://yesno.wtf/api").asJsonObject().setCallback(new FutureCallback<JsonObject>() {
             @Override
             public void onCompleted(Exception e, JsonObject result) {
                 if (e != null) {
-                    showError(getString(R.string.network_error), true);
+                    ViewUtils.toggleError(mErrorTextView, getString(R.string.network_error), true);
                     if (firstRun)
-                        showLoading(false);
+                        ViewUtils.toggleAlpha(progressBar, false);
                     else
                         swipeRefreshLayout.setRefreshing(false);
                 } else {
-                    showError(null, false);
+                    ViewUtils.toggleError(mErrorTextView, null, false);
                     mCurrentImageUrl = result.get("image").getAsString();
 
                     Ion.with(imageView).animateIn(mImageAnimation).centerCrop().load(mCurrentImageUrl).setCallback(new FutureCallback<ImageView>() {
                         @Override
                         public void onCompleted(Exception e, ImageView result) {
                             if (e != null)
-                                showError(getString(R.string.network_error), true);
+                                ViewUtils.toggleError(mErrorTextView, getString(R.string.network_error), true);
                             else {
-                                showError(null, false);
+                                ViewUtils.toggleError(mErrorTextView, null, false);
                                 if (firstRun)
-                                    showLoading(false);
+                                    ViewUtils.toggleAlpha(progressBar, false);
                                 else
                                     swipeRefreshLayout.setRefreshing(false);
-                                showFAB(true);
+                                ViewUtils.toggleFab(fab, true);
 
                                 //mToolbar.setBackgroundColor(getResources().getColor(android.R.color.transparent));
                                 mToolbarBackground.animate().translationY(-mToolbarBackground.getBottom()).setInterpolator(new AccelerateInterpolator()).start();
@@ -202,50 +203,5 @@ public class ResultActivity extends ActionBarActivity {
                 fab.startAnimation(animation);
             }
         }
-    }
-
-    private void showError(String text, boolean show) {
-
-        if (text == null && show)
-            throw new NullPointerException("text can't be null");
-        if ("".equals(text) && show)
-            throw new IllegalArgumentException("text can't be empty");
-
-        if (show) {
-            Animation animation = new AlphaAnimation(0, 1);
-            animation.setInterpolator(new AccelerateInterpolator());
-            mErrorTextView.setText(text);
-            mErrorTextView.setVisibility(View.VISIBLE);
-            mErrorTextView.startAnimation(animation);
-
-        } else if (mErrorTextView.getVisibility() == View.VISIBLE) {
-            Animation animation = new AlphaAnimation(1, 0);
-            animation.setInterpolator(new AccelerateInterpolator());
-            animation.setAnimationListener(new Animation.AnimationListener() {
-                @Override
-                public void onAnimationStart(Animation animation) {
-
-                }
-
-                @Override
-                public void onAnimationEnd(Animation animation) {
-                    mErrorTextView.setText("");
-                    mErrorTextView.setVisibility(View.INVISIBLE);
-                }
-
-                @Override
-                public void onAnimationRepeat(Animation animation) {
-
-                }
-            });
-
-            mErrorTextView.startAnimation(animation);
-        }
-
-
-    }
-
-    private void showLoading(boolean value) {
-        progressBar.animate().alpha(value ? 1 : 0);
     }
 }
