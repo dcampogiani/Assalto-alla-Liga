@@ -2,6 +2,7 @@ package com.danielecampogiani.assaltoallaliga.support;
 
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -29,9 +30,29 @@ public class ThreadsManager {
     private ThreadsManager() {
     }
 
-    static public void execute(final Runnable doInBackground) {
+    static public void execute(final Runnable doInBackground, final Runnable doOnMainThread) {
         if (doInBackground == null)
             throw new NullPointerException("doInBackground can't be null");
-        sInstance.mThreadPool.execute(doInBackground);
+
+        if (doOnMainThread == null)
+            throw new NullPointerException("doOnMainThread can't be null");
+        Runnable toExecute = new Runnable() {
+            @Override
+            public void run() {
+                doInBackground.run();
+                mUIHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            doOnMainThread.run();
+                        }catch (RuntimeException runtimeException){
+                            Log.e(ThreadsManager.class.getSimpleName(), runtimeException.getMessage());
+                        }
+
+                    }
+                });
+            }
+        };
+        sInstance.mThreadPool.execute(toExecute);
     }
 }

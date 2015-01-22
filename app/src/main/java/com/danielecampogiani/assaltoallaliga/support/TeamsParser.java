@@ -28,10 +28,11 @@ public class TeamsParser {
         if (listener == null)
             throw new NullPointerException("listener can't be null");
 
-        Runnable runnable = new Runnable() {
+        final List<Team> teams = new ArrayList<>();
+
+        Runnable background = new Runnable() {
             @Override
             public void run() {
-                final List<Team> teams = new ArrayList<>();
 
                 Document document = Jsoup.parse(html);
 
@@ -47,18 +48,16 @@ public class TeamsParser {
                     team.setName(name);
                     teams.add(team);
                 }
-
-                Handler handler = new Handler(Looper.getMainLooper());
-                handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        listener.onTeamsParsed(teams);
-                    }
-                });
-
             }
         };
-        ThreadsManager.execute(runnable);
+
+        Runnable mainThread = new Runnable() {
+            @Override
+            public void run() {
+                listener.onTeamsParsed(teams);
+            }
+        };
+        ThreadsManager.execute(background,mainThread);
     }
 
     public interface TeamsParserListener {
