@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
-import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -131,6 +130,8 @@ public class ResultActivity extends ActionBarActivity {
     private void doStuff(final boolean firstRun) {
 
         ViewUtils.toggleFab(fab, false);
+        if (!firstRun)
+            ViewUtils.toggleToolbar(mToolbar, false);
 
         Ion.with(this).load("http://yesno.wtf/api").asJsonObject().setCallback(new FutureCallback<JsonObject>() {
             @Override
@@ -152,15 +153,16 @@ public class ResultActivity extends ActionBarActivity {
                                 ViewUtils.toggleError(mErrorTextView, getString(R.string.network_error), true);
                             else {
                                 ViewUtils.toggleError(mErrorTextView, null, false);
-                                if (firstRun)
+                                if (firstRun) {
                                     ViewUtils.toggleAlpha(progressBar, false);
-                                else
+                                    ViewUtils.toggleToolbar(mToolbarBackground, false);
+                                    mToolbar.setSubtitleTextColor(getResources().getColor(R.color.accent));
+                                } else {
                                     swipeRefreshLayout.setRefreshing(false);
+                                }
                                 ViewUtils.toggleFab(fab, true);
 
-                                //mToolbar.setBackgroundColor(getResources().getColor(android.R.color.transparent));
-                                mToolbarBackground.animate().translationY(-mToolbarBackground.getBottom()).setInterpolator(new AccelerateInterpolator()).start();
-                                mToolbar.setSubtitleTextColor(getResources().getColor(R.color.accent));
+
                             }
                         }
                     });
@@ -170,38 +172,4 @@ public class ResultActivity extends ActionBarActivity {
 
     }
 
-    private void showFAB(boolean show) {
-        if (show) {
-            TranslateAnimation animation = new TranslateAnimation(0, 0, 400, 0);
-            animation.setDuration(300);
-            animation.setInterpolator(new AccelerateInterpolator());
-            animation.setFillAfter(true);
-            fab.setVisibility(View.VISIBLE);
-            fab.startAnimation(animation);
-        } else {
-            if (fab.getVisibility() == View.VISIBLE) {
-                TranslateAnimation animation = new TranslateAnimation(0, 0, 0, 400);
-                animation.setFillAfter(true);
-                animation.setInterpolator(new AccelerateInterpolator());
-                animation.setDuration(300);
-                animation.setAnimationListener(new Animation.AnimationListener() {
-                    @Override
-                    public void onAnimationStart(Animation animation) {
-
-                    }
-
-                    @Override
-                    public void onAnimationEnd(Animation animation) {
-                        fab.setVisibility(View.INVISIBLE);
-                    }
-
-                    @Override
-                    public void onAnimationRepeat(Animation animation) {
-
-                    }
-                });
-                fab.startAnimation(animation);
-            }
-        }
-    }
 }

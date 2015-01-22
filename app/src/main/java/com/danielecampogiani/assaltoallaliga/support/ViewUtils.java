@@ -16,6 +16,7 @@ public class ViewUtils {
     private static final int FAB_ANIMATION_DURATION = 300;
     private static final int FAB_Y_TRANSLATION = 20;
     private static final int ERROR_ANIMATION_DURATION = 300;
+    private static final int TOOLBAR_ANIMATION_DURATION = 100;
 
 
     public static void toggleFab(final View fab, boolean show) {
@@ -192,5 +193,62 @@ public class ViewUtils {
             });
         }
 
+    }
+
+    public static void toggleToolbar(final View view, boolean show) {
+
+        if (view == null)
+            throw new NullPointerException("view can't be null");
+
+        if (show) {
+            view.setY(view.getY() - view.getHeight());
+            view.setVisibility(View.VISIBLE);
+            ViewPropertyAnimator.animate(view).setInterpolator(new AccelerateDecelerateInterpolator()).setDuration(TOOLBAR_ANIMATION_DURATION).translationY(view.getHeight()).setListener(new Animator.AnimatorListener() {
+                @Override
+                public void onAnimationStart(Animator animation) {
+
+                }
+
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    view.setVisibility(View.VISIBLE);
+                }
+
+                @Override
+                public void onAnimationCancel(Animator animation) {
+
+                }
+
+                @Override
+                public void onAnimationRepeat(Animator animation) {
+
+                }
+            });
+
+        } else if (view.getVisibility() == View.VISIBLE) {
+            ViewPropertyAnimator.animate(view).setInterpolator(new AccelerateDecelerateInterpolator()).setDuration(TOOLBAR_ANIMATION_DURATION).translationY(-view.getHeight()).setListener(new Animator.AnimatorListener() {
+                @Override
+                public void onAnimationStart(Animator animation) {
+
+                }
+
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    view.setY(view.getY() + view.getHeight());
+                    view.setVisibility(View.INVISIBLE);
+                }
+
+                @Override
+                public void onAnimationCancel(Animator animation) {
+
+                }
+
+                @Override
+                public void onAnimationRepeat(Animator animation) {
+
+                }
+            });
+
+        }
     }
 }
