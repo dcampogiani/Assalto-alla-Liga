@@ -140,10 +140,13 @@ public class SelectLegaActivity extends ActionBarActivity {
                             public void onTeamsParsed(List<Team> teams) {
 
                                 if (teams.size() == 0) {
+                                    ViewUtils.toggleFab(fab,false);
+                                    ViewUtils.toggleAlpha(mRecyclerView,false);
                                     ViewUtils.toggleError(mErrorTextView, getString(R.string.wrong_lega_name), true);
                                     ViewUtils.toggleAlpha(mProgressbar, false);
 
                                 } else {
+                                    ViewUtils.toggleAlpha(mRecyclerView,true);
                                     mTeams = teams;
 
                                     Collections.sort(mTeams);
